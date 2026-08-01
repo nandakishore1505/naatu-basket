@@ -1,0 +1,26 @@
+# Secrets / environment files
+.env
+**/.env
+docker/.env
+
+# Java / Spring Boot
+backend/target/
+*.class
+*.jar
+!*/wrapper/*.jar
+
+# IDE
+.idea/
+*.iml
+.vscode/
+.DS_Store
+
+# Node / React
+node_modules/
+build/
+dist/
+.env.local
+
+# Logs
+*.log
+logs/
