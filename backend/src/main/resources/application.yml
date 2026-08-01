@@ -5,7 +5,7 @@ spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/naatu_basket
     username: naatu_admin
-    password: dev_local_pg_pass
+    password: 1234
     driver-class-name: org.postgresql.Driver
 
   jpa:
