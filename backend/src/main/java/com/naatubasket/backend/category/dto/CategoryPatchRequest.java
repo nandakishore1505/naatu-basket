@@ -1,20 +1,17 @@
 package com.naatubasket.backend.category.dto;
 
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 /**
- * Full representation used by POST and PUT. {@code displayOrder} and
- * {@code active} are optional; the service substitutes 0 and true rather than
- * forwarding null into the NOT NULL columns.
+ * Partial update payload. Every field is optional and a null value means
+ * "leave unchanged", which is what distinguishes PATCH from PUT here.
  */
 @Data
-public class CategoryRequest {
+public class CategoryPatchRequest {
 
-    @NotBlank(message = "Category name is required")
-    @Size(max = 100, message = "Category name cannot exceed 100 characters")
+    @Size(min = 1, max = 100, message = "Category name must be between 1 and 100 characters")
     private String name;
 
     @Size(max = 500, message = "Description cannot exceed 500 characters")
@@ -29,4 +26,5 @@ public class CategoryRequest {
     private Integer displayOrder;
 
     private Boolean active;
+
 }
