@@ -1,12 +1,16 @@
 package com.naatubasket.backend.common.exception;
 
 import java.time.LocalDateTime;
+import java.util.Map;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 import lombok.Builder;
 import lombok.Data;
 
 @Data
 @Builder
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ApiError {
 
     private LocalDateTime timestamp;
@@ -18,5 +22,10 @@ public class ApiError {
     private String message;
 
     private String path;
+
+    /**
+     * Populated only for validation failures: field name -> violation message.
+     */
+    private Map<String, String> fieldErrors;
 
 }

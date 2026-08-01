@@ -1,5 +1,7 @@
 package com.naatubasket.backend.category.dto;
 
+import java.time.LocalDateTime;
+
 import lombok.Builder;
 import lombok.Data;
 
