@@ -6,8 +6,23 @@ import java.util.List;
 import com.naatubasket.backend.auth.entity.User;
 import com.naatubasket.backend.common.entity.BaseEntity;
 
-import jakarta.persistence.*;
-import lombok.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Builder.Default;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "carts")
@@ -22,18 +37,24 @@ public class Cart extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @Builder.Default
-    @Column(nullable = false)
+    @Default
     private String status = "ACTIVE";
 
-    @OneToMany(mappedBy = "cart",
+    @Builder.Default
+    @OneToMany(
+            mappedBy = "cart",
             cascade = CascadeType.ALL,
             orphanRemoval = true)
-    @Builder.Default
     private List<CartItem> items = new ArrayList<>();
 
-}
+    @PrePersist
+    public void prePersist() {
+        if (status == null) {
+            status = "ACTIVE";
+        }
+    }
+}   

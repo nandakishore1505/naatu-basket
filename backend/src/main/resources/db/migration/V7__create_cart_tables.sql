@@ -14,7 +14,7 @@ CREATE TABLE carts
 (
     id BIGSERIAL PRIMARY KEY,
 
-    user_id BIGINT NOT NULL,
+    user_id BIGINT NOT NULL UNIQUE,
 
     status VARCHAR(20) NOT NULL DEFAULT 'ACTIVE',
 
@@ -59,7 +59,10 @@ CREATE TABLE cart_items
 
     CONSTRAINT fk_cart_item_product
         FOREIGN KEY (product_id)
-        REFERENCES products(id)
+        REFERENCES products(id),
+
+    CONSTRAINT uk_cart_product
+        UNIQUE(cart_id, product_id)
 );
 
 ------------------------------------------------------------

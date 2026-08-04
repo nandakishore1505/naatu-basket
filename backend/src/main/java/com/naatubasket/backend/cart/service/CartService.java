@@ -58,14 +58,23 @@ public class CartService {
                 .orElse(null);
 
         if (item == null) {
+
             item = CartItem.builder()
                     .cart(cart)
                     .product(product)
                     .quantity(request.getQuantity())
                     .price(product.getSellingPrice())
+                    .total(product.getSellingPrice()
+                            .multiply(BigDecimal.valueOf(request.getQuantity())))
                     .build();
+
         } else {
+
             item.setQuantity(item.getQuantity() + request.getQuantity());
+
+            item.setTotal(
+                    item.getPrice()
+                            .multiply(BigDecimal.valueOf(item.getQuantity())));
         }
 
         cartItemRepository.save(item);
@@ -92,6 +101,7 @@ public class CartService {
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
         CartResponse response = new CartResponse();
+
         response.setCartId(cart.getId());
         response.setUserId(userId);
         response.setItems(items);
