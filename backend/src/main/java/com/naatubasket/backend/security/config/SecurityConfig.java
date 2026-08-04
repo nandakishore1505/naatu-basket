@@ -2,20 +2,18 @@ package com.naatubasket.backend.security.config;
 
 import com.naatubasket.backend.security.jwt.JwtAuthenticationEntryPoint;
 import com.naatubasket.backend.security.jwt.JwtAuthenticationFilter;
-
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import static org.springframework.security.config.Customizer.withDefaults;
-
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 
 @Configuration
 @RequiredArgsConstructor
@@ -45,10 +43,11 @@ public class SecurityConfig {
                                 "/v3/api-docs/**")
                         .permitAll()
 
-                        // Public APIs
+                        // Public APIs (Development)
                         .requestMatchers(
+                                "/api/auth/**",
                                 "/api/categories/**",
-                                "/api/auth/**")
+                                "/api/products/**")
                         .permitAll()
 
                         // Everything else
