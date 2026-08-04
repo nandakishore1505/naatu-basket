@@ -1,9 +1,11 @@
 package com.naatubasket.backend.product.service;
 
-import java.util.List;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import com.naatubasket.backend.category.entity.Category;
 import com.naatubasket.backend.category.repository.CategoryRepository;
@@ -46,13 +48,12 @@ public class ProductService {
     }
 
     @Transactional(readOnly = true)
-    public List<ProductResponse> getAllProducts() {
+public Page<ProductResponse> getAllProducts(Pageable pageable) {
 
-        return productRepository.findByDeletedAtIsNull()
-                .stream()
-                .map(productMapper::toResponse)
-                .toList();
-    }
+    return productRepository
+            .findByDeletedAtIsNull(pageable)
+            .map(productMapper::toResponse);
+}
 
     @Transactional(readOnly = true)
     public ProductResponse getProductById(Long id) {
@@ -63,5 +64,17 @@ public class ProductService {
 
         return productMapper.toResponse(product);
     }
+
+    @Transactional(readOnly = true)
+public Page<ProductResponse> searchProducts(
+        String keyword,
+        Pageable pageable) {
+
+    return productRepository
+            .findByNameContainingIgnoreCaseAndDeletedAtIsNull(
+                    keyword,
+                    pageable)
+            .map(productMapper::toResponse);
+}
 
 }

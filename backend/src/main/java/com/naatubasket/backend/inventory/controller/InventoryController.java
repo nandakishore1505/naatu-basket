@@ -6,6 +6,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.naatubasket.backend.common.constants.ApiMessages;
+import com.naatubasket.backend.common.constants.ApiPaths;
+import com.naatubasket.backend.common.response.ApiResponse;
+import com.naatubasket.backend.common.response.ResponseBuilder;
 import com.naatubasket.backend.inventory.dto.InventoryRequest;
 import com.naatubasket.backend.inventory.dto.InventoryResponse;
 import com.naatubasket.backend.inventory.service.InventoryService;
@@ -14,33 +18,40 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/api/inventory")
+@RequestMapping(ApiPaths.INVENTORY)
 @RequiredArgsConstructor
 public class InventoryController {
 
     private final InventoryService inventoryService;
 
     @PostMapping
-    public ResponseEntity<InventoryResponse> createInventory(
+    public ResponseEntity<ApiResponse<InventoryResponse>> createInventory(
             @Valid @RequestBody InventoryRequest request) {
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(inventoryService.createInventory(request));
+                .body(ResponseBuilder.success(
+                        ApiMessages.INVENTORY_CREATED,
+                        inventoryService.createInventory(request)));
     }
 
     @GetMapping
-    public ResponseEntity<List<InventoryResponse>> getAllInventory() {
+    public ResponseEntity<ApiResponse<List<InventoryResponse>>> getAllInventory() {
 
         return ResponseEntity.ok(
-                inventoryService.getAllInventory());
+                ResponseBuilder.success(
+                        ApiMessages.INVENTORY_FETCHED,
+                        inventoryService.getAllInventory()));
     }
 
     @GetMapping("/{productId}")
-    public ResponseEntity<InventoryResponse> getInventoryByProduct(
+    public ResponseEntity<ApiResponse<InventoryResponse>> getInventoryByProduct(
             @PathVariable Long productId) {
 
         return ResponseEntity.ok(
-                inventoryService.getInventoryByProduct(productId));
+                ResponseBuilder.success(
+                        ApiMessages.INVENTORY_FETCHED,
+                        inventoryService.getInventoryByProduct(productId)));
     }
+
 }
